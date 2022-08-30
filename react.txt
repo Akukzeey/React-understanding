@@ -231,3 +231,83 @@ N.B
 
         }
     }
+
+
+     //// Making request with axios ////
+npm install --save axios  - this how you download axios on your react project
+-Making unsplash api request
+
+           axios.get('https://api.unsplash.com/search/photos', {
+               params: { query: term },
+               headers:{
+                   Authorization:'Client-ID VP8SEBVgpH2gZStWG02iHoWGz0kFbM-v_m_NG48v-Yo'
+               }
+           });
+
+
+
+ NB
+   -Whenever we expect a state property to contain an array or object we initialize an empty array or empty object:
+      state={images=[]}
+      state={images={}}
+
+
+
+
+
+
+ -When we want to use an arrow function inside an async function to avoid errors we do this
+
+        onSearchSubmit= async (term)=>{
+            const response=await axios.get('https://api.unsplash.com/search/photos', {
+                params: { query: term },
+                headers:{
+                    Authorization:'Client-ID VP8SEBVgpH2gZStWG02iHoWGz0kFbM-v_m_NG48v-Yo'
+                }
+            });
+
+            this.setState({images:response.data.results})
+        }
+
+
+
+////  Keys In Lists  ////
+-Key is a purely perfomance consideration that's gonna help react to render or update list to be more precise.
+-We must ensure that we include keys on every element that we render as part of a list.
+-We don't have to do it on every elements it's mostly done on list of elements.
+-Whenever we use a KEY we try to use a key property or a value of the key that cooresponds to one distinct element in the arrays which in most cases is the ID of items that we are iterating over or trying to render out into the DOM.
+-We usually add the KEY to the root tag that we are returning inside the statement.
+             const images=props.images.map((image) => {
+                 return <div key={image.id}>  //DIV is the root element
+                 <img src={image.urls.regular}/>
+                 </div>
+              })
+
+//// ACCESSING THE DOM WITH REFS ////
+-React Refs gives access to a single DOM element.
+-We create refs in the CONSTRUCTOR function, assign them to instance variables, then pass to a particular JSX element as props.
+-We can't pass it to a state function because we mostly put data in state cause we expect it to change over time.
+
+
+   ///This how we make refs.
+       constructor (props){
+           super(props)
+
+           this.imageRef = React.createRef()
+       };
+
+    ///This is how we wire it by an individual property by using ref={this.imageRef}
+       <img ref={this.imageRef} src={this.props.image.urls.regular} alt={this.props.image.description}/>
+
+
+
+
+
+-To get height in a ref first we need to reach into the DOM and figure out the height.A ref is like a JavaScript object
+        componentDidMount(){
+            this.imageRef.current.addEventListener ('load' ,this.setSpans);
+        }
+
+        setSpans = () =>{
+            console.log(this.imageRef.current.clientHeight)
+        }
